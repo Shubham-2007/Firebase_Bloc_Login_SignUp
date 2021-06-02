@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "612893679199",
+    "project_id": "perfect-app-d25de",
+    "storage_bucket": "perfect-app-d25de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612893679199:android:305fb0aa21cbaf16b645ea",
+        "android_client_info": {
+          "package_name": "com.example.perfect_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612893679199-nnl0a7p9f9hlas6lv01r4bu0islfc3bq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAtLIIMsq_s5K7wD4Lhbfw3OKyRtgwsYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612893679199-nnl0a7p9f9hlas6lv01r4bu0islfc3bq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
