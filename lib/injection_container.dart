@@ -1,66 +1,77 @@
-// import 'package:data_connection_checker/data_connection_checker.dart';
-// import 'package:get_it/get_it.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:perfect_app/features/registration_trivia/data/datasources/number_trivia_remote_data_source.dart';
-// import 'package:perfect_app/features/registration_trivia/data/repositories/number_trivia_repository_impl.dart';
-// import 'package:perfect_app/features/registration_trivia/domain/repositories/reg_trivia_repository.dart';
-// import 'package:perfect_app/features/registration_trivia/domain/usecases/login_trivia.dart';
-// import 'package:perfect_app/features/registration_trivia/presentation/bloc/number_trivia_bloc.dart';
-// // import 'package:shared_preferences/shared_preferences.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
+import 'package:perfect_app/features/login_page/data/datasources/login_user_auth.dart';
+import 'package:perfect_app/features/login_page/data/repositories/login_user_repository_impl.dart';
+import 'package:perfect_app/features/login_page/domain/repositories/login_user_repository.dart';
+import 'package:perfect_app/features/login_page/domain/usecases/get_login_user.dart';
+import 'package:perfect_app/features/signup_page/data/datasources/signup_user_auth.dart';
+import 'package:perfect_app/features/signup_page/data/repositories/signup_user_repository_impl.dart';
+import 'package:perfect_app/features/signup_page/domain/repositories/signup_user_repository.dart';
+import 'package:perfect_app/features/signup_page/domain/usecases/get_signup_user.dart';
+import 'core/network/network_info.dart';
+import 'core/util/input_converter.dart';
+import 'features/login_page/presentation/bloc/bloc.dart';
+import 'features/signup_page/presentation/bloc/bloc.dart';
 
-// import 'core/network/network_info.dart';
-// import 'core/util/input_converter.dart';
-// // import 'features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
-// // import 'features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
-// // import 'features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
-// // import 'features/number_trivia/domain/repositories/number_trivia_repository.dart';
-// // import 'features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
-// // import 'features/number_trivia/domain/usecases/get_random_number_trivia.dart';
-// // import 'features/number_trivia/presentation/bloc/number_trivia_bloc.dart';
-// // import 'features/registration_trivia/presentation/bloc/bloc.dart';
+final sl = GetIt.instance;
+final s2 = GetIt.instance;
 
-// final sl = GetIt.instance;
+Future<void> init() async {
+//! Signup User Object
+  // Bloc
+  sl.registerFactory(
+    () => SignupUserBloc(
+      concrete: sl(),
+    ),
+  );
 
-// Future<void> init() async {
-//   //! Features - Number Trivia
-//   // Bloc
-//   sl.registerFactory(
-//     () => NumberTriviaBloc(
-//       concrete: sl(),
-//     ),
-//   );
+  // Use cases
+  sl.registerLazySingleton(() => GetSignupUser(sl()));
 
-//   // Use cases
-//   sl.registerLazySingleton(() => GetLoginUser(sl()));
-//   // sl.registerLazySingleton(() => GetRandomNumberTrivia(sl()));
+  // Repository
+  sl.registerLazySingleton<GetSignupUserRepository>(
+    () => SignupUserRepositoryImpl(
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  ); 
 
-//   // Repository
-//   sl.registerLazySingleton<GetLoginUserRepository>(
-//     () => LoginUserRepositoryImpl(
-//       networkInfo: sl(),
-//       remoteDataSource: sl(),
-//     ),
-//   );
+  // Data sources
+  sl.registerLazySingleton<SignupUserAuth>(
+    () => SignupUserAuthImpl(),
+  );
 
-//   // Data sources
-//   sl.registerLazySingleton<LoginUserDataSource>(
-//     () => LoginUseRemoteDataSourceImpl(
-//       // firebaseAuth: sl(),
-//       // abc: sl(),
-//     ),
-//   );
+  //! Core
+  sl.registerLazySingleton(() => InputConverter());
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
-//   // sl.registerLazySingleton<NumberTriviaLocalDataSource>(
-//   //   () => NumberTriviaLocalDataSourceImpl(sharedPreferences: sl()),
-//   // );
+  //! External
+  // final sharedPreferences = await SharedPreferences.getInstance();
+  // sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() => DataConnectionChecker());
 
-//   //! Core
-//   sl.registerLazySingleton(() => InputConverter());
-//   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+//! Login User Object
+  s2.registerFactory(
+    () => LoginUserBloc(
+      concrete: s2(),
+    ),
+  );
 
-//   //! External
-//   // final sharedPreferences = await SharedPreferences.getInstance();
-//   // sl.registerLazySingleton(() => sharedPreferences);
-//   sl.registerLazySingleton(() => http.Client());
-//   sl.registerLazySingleton(() => DataConnectionChecker());
-// }
+  // Use cases
+  s2.registerLazySingleton(() => GetLoginUser(s2()));
+
+  // Repository
+  s2.registerLazySingleton<GetLoginUserRepository>(
+    () => LoginUserRepositoryImpl(
+      networkInfo: s2(),
+      remoteDataSource: s2(),
+    ),
+  );
+
+  // Data sources
+  s2.registerLazySingleton<LoginUserAuth>(
+    () => LoginUserAuthImpl(),
+  );
+}
